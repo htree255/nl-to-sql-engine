@@ -1,0 +1,11 @@
+# Secret keys
+.env
+
+# Database files
+company.db
+
+# Python files
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
