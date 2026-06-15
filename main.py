@@ -9,18 +9,19 @@ print("Type 'quit' to exit.\n")
 
 while True:
     question = input("Your question: ").strip()
-    
+
     if question.lower() == "quit":
         break
 
     if not question:
         continue
 
-    #Step 1: ask AI to write sql
+    # Step 1: ask AI to write sql
     print("Thinking..")
     sql = ask_ai_for_sql(question)
     print("SQL generated.")
+    print(f"{sql}")
 
-    #Step 2: run sql on the database
+    # Step 2: run sql on the database
     print("Results: ")
     run_query(conn, sql)
