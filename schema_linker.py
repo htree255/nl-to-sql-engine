@@ -4,15 +4,59 @@ import string
 # Common English words that appear everywhere and carry no
 # meaningful signal about which table is relevant.
 STOPWORDS = {
-    "the", "a", "an", "is", "are", "was", "were", "in", "on", "at",
-    "of", "to", "and", "or", "for", "with", "by", "this", "that",
-    "each", "which", "what", "who", "how", "many", "list", "show",
-    "all", "find", "get", "as", "be", "it", "its",
+    "the",
+    "a",
+    "an",
+    "is",
+    "are",
+    "was",
+    "were",
+    "in",
+    "on",
+    "at",
+    "of",
+    "to",
+    "and",
+    "or",
+    "for",
+    "with",
+    "by",
+    "this",
+    "that",
+    "each",
+    "which",
+    "what",
+    "who",
+    "how",
+    "many",
+    "list",
+    "show",
+    "all",
+    "find",
+    "get",
+    "as",
+    "be",
+    "it",
+    "its",
 }
 
 
 def clean_word(word):
     return word.strip(string.punctuation).lower()
+
+
+def tokenize(text):
+    """
+    Split text into a set of cleaned, meaningful words —
+    lowercased, punctuation stripped, stopwords removed.
+    """
+    cleaned = set()
+    words = text.split()
+    for word in words:
+        if word and clean_word(word) not in STOPWORDS:
+            cleaned.add(clean_word(word))
+
+    return cleaned
 
 
 def get_table_keywords(table_name, table_info):
@@ -29,18 +73,12 @@ def get_table_keywords(table_name, table_info):
     keywords.add(table_name)
 
     # Add the table description
-    for word in table_info["description"].lower().split():
-        word = clean_word(word)
-        if word not in STOPWORDS:
-            keywords.add(word)
+    keywords.update(tokenize(table_info["description"]))
 
     # Add the columns
     for col_name, col_desc in table_info["columns"].items():
-        keywords.add(col_name.lower())
-        for word in col_desc.lower().split():
-            word = clean_word(word)
-            if word not in STOPWORDS:
-                keywords.add(word)
+        keywords.update(tokenize(col_name))
+        keywords.update(tokenize(col_desc))
 
     return keywords
 
