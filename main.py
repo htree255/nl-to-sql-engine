@@ -1,6 +1,7 @@
 import sqlite3
-from database import create_sample_database, run_query
+from database import create_sample_database, print_result
 from ai_caller import ask_ai_for_sql
+from validator import run_with_validation
 
 conn = create_sample_database()
 
@@ -16,12 +17,17 @@ while True:
     if not question:
         continue
 
-    # Step 1: ask AI to write sql
-    print("Thinking..")
-    sql = ask_ai_for_sql(question)
+    # Step 1: ask AI to write the initial sql
+    print("\nThinking..")
+    sql, schema_text, examples_text = ask_ai_for_sql(question)
     print("SQL generated.")
-    print(f"{sql}")
+    print(f"Here is the SQL generated: {sql}")
 
-    # Step 2: run sql on the database
-    print("Results: ")
-    run_query(conn, sql)
+    # Step 2: run sql on the database - with automatic fixing, if it fails
+    result = run_with_validation(question, sql, conn, schema_text, examples_text )
+
+    # Step 3: show the results
+    print("\nResults: ")
+    print_result(result)
+
+    

@@ -91,15 +91,35 @@ def run_query(connection, sql):
 
         cursor.execute(sql)
         rows = cursor.fetchall()
-
-        if rows:
-            for row in rows:
-                print(row)
-        else:
-            print("query ran, but no rows returned")
+ 
+        return {"success": True, "rows": rows}
 
     except sqlite3.Error as e:
-        print("Error: {e}")
+        return {"success": False, "error": str(e)}
+
+def print_result(result):
+    """
+    Print a result dictionary from run_query in a readable way.
+    Separated from run_query so the validation loop can check
+    success/failure before deciding whether to display anything.
+    """
+
+    if not result["success"]:
+        print (f"SQL Error: {result["error"]}")
+        return
+    
+    rows = result["rows"]
+    #columns = result["columns"]
+
+    if not rows:
+        print("(query ran successfully, but returned no rows)")
+        return
+    
+    #print(" | ".join(columns))
+    print("-" * 40)
+    for row in rows:
+        print(" | ".join(str(val) for val in row))
+
 
 
 if __name__ == "__main__":

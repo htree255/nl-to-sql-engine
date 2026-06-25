@@ -17,13 +17,13 @@ def ask_ai_for_sql(question):
     relevant_tables = get_relevant_tables(question)
     schema_text = build_schema(relevant_tables)
 
-    print(f"Schema linker created: {relevant_tables}")
+    print(f"\nSchema linker created: {relevant_tables}")
 
     # 2. Few shot prompting
     similar_examples = get_similar_examples(question)
     examples_text = build_examples_text(similar_examples)
     if similar_examples:
-        print("Few shot examples matched:")
+        print("\nFew shot examples matched:")
         for ex in similar_examples:
             print(f"{ex["question"]}")
 
@@ -49,8 +49,11 @@ def ask_ai_for_sql(question):
         ],
     )
 
+    sql = completion.choices[0].message.content.strip()
+
     # 6. Extract and return the generated text
-    return completion.choices[0].message.content
+    print(f"\nGenerated sql: {sql}  \nSchema text: {schema_text} \nExamples text:{examples_text}")
+    return sql, schema_text, examples_text
 
 
 # Test

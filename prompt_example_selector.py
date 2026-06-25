@@ -35,7 +35,7 @@ def build_examples_text(examples):
     if not examples:
         return ""
 
-    text = "Here are some example questions and their correct SQL: \n"
+    text = "\nHere are some example questions and their correct SQL: \n"
 
     for ex in examples:
         text += f"Question: {ex["question"]}\n"
@@ -58,4 +58,4 @@ if __name__ == "__main__":
         print(f"Question: {question} \n")
 
         for ex in examples:
-            print(f"Macthed: {ex["question"]}\n")
+            print(f"Matched: {ex["question"]}\n")
